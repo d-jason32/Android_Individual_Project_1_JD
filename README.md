@@ -1,12 +1,17 @@
 # CSC 371 Individual Project # 1
 
-## Jetpack Compose, Android controls, intents and dialogs
+## Description: Android app with a splash screen, login page and register page with validation created using Jetpack Compose, android controls, intents and dialogs. 
 
-You need to create an app that allows users to register and login into the system. The focus of this project is for you to create an app with several activities and data validation.
+## Features:
+1. Splash screen with the app name and logo.
+2. Users can either log in or register.
+3. Register page has fields for first name, family name, DOB, email and password.
+4. Validation for the inputted text. 
+5. Works on phones and tablets. 
 
 You should have for your app:
 
-    A welcome screen (splash screen) with your app name and a picture.
+    X A welcome screen (splash screen) with your app name and a picture.
 
     You should then move to a screen that asks the user for either to log in or to register.
 
@@ -26,4 +31,8 @@ You should have for your app:
 
     Make sure that you test your app at least on two different devices (phone and tablet) and for portrait and landscape modes. 
 
+### App Icon
+![img.png](img.png)
 
+### App Splash screen
+![img_1.png](img_1.png)
