@@ -11,7 +11,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -35,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.graphics.Color
 import com.example.android_individual_project_1_jd.ui.theme.Android_Individual_Project_1_JDTheme
 
 // Main activity for the application
@@ -69,34 +74,42 @@ fun OnboardingScreen(
     modifier: Modifier = Modifier
 ) {
 
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        color = Color.LightGray,
     ) {
-        // Make the font larger
-        Text("Long Island Plant and Tree Identifier",
-            // Center the words on the splash screen
-            textAlign = TextAlign.Center,
-
-            // makes the font larger
-            fontSize = 30.sp,
-
-            // Make the font bold
-            fontWeight = FontWeight.Bold)
-
-        // Add a picture of the logo
-        PlantPicture()
-
-        // Adds a button
-        Button(
-            modifier = Modifier
-                .padding(vertical = 24.dp)
-                .fillMaxWidth(),
-            onClick = onContinueClicked,
-
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Continue")
+            // Make the font larger
+            Text(
+                "Long Island Plant and Tree Identifier",
+                // Center the words on the splash screen
+                textAlign = TextAlign.Center,
+
+                // makes the font larger
+                fontSize = 30.sp,
+
+                // Make the font bold
+                fontWeight = FontWeight.Bold
+            )
+
+            // Add a picture of the logo
+            PlantPicture()
+
+            // Adds a button
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.DarkGray
+                ),
+                modifier = Modifier
+                    .padding(vertical = 24.dp),
+                onClick = onContinueClicked,
+
+                ) {
+                Text("Continue")
+            }
         }
     }
 }
@@ -119,7 +132,7 @@ fun Login(nav: NavHostController, modifier: Modifier = Modifier) {
     var password by remember { mutableStateOf("")}
 
     Surface(
-        color = MaterialTheme.colorScheme.primary,
+        color = Color.LightGray,
         modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         // Column for the login page
@@ -146,17 +159,22 @@ fun Login(nav: NavHostController, modifier: Modifier = Modifier) {
 
             TextField(
                 value = email,
+                shape = RoundedCornerShape(12.dp),
                 onValueChange = { email = it},
                 label = { Text("Email")}
             )
 
             TextField(
                 value = password,
+                shape = RoundedCornerShape(12.dp),
                 onValueChange = { password = it},
                 label = { Text("Password")}
             )
             // Button for login
             ElevatedButton(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.DarkGray
+                ),
                 onClick = {
                     // All fields must be filled in
                     if (email.isBlank() || password.isBlank()){
@@ -179,6 +197,9 @@ fun Login(nav: NavHostController, modifier: Modifier = Modifier) {
             }
             // Button to go to the register account page
             ElevatedButton(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.DarkGray
+                ),
                 onClick = { nav.navigate("register") }
             ) {
                 Text("Don't have an account? Register")
@@ -207,100 +228,138 @@ fun RegisterScreen(nav: NavHostController){
     var email by remember { mutableStateOf("")}
     var password by remember { mutableStateOf("")}
 
-
-
-    // column for login page
-    Column(
-        modifier = Modifier.fillMaxSize(),
-
-        // pushes all the horizontal alignment of the textboxes into the center
-        horizontalAlignment = Alignment.CenterHorizontally,
-
-        // Vertical padding between all the elements in the column
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+    Surface(
+        color = Color.LightGray,
     ) {
-        PlantPicture()
-
-        Text("Sign up",
-            // Center the words on the splash screen
-            textAlign = TextAlign.Center,
-            // makes the font larger
-            fontSize = 30.sp,
-            // Make the font bold
-            fontWeight = FontWeight.Bold)
-
-        TextField(
-            value = firstName,
-            onValueChange = { firstName = it},
-            label = { Text("First Name")}
-        )
-
-        TextField(
-            value = lastName,
-            onValueChange = { lastName = it},
-            label = { Text("Last Name")}
-        )
-
-        TextField(
-            value = dob,
-            onValueChange = { dob = it},
-            label = { Text("Date of Birth")}
-        )
-
-        TextField(
-            value = email,
-            onValueChange = { email = it},
-            label = { Text("Email")}
-        )
-        TextField(
-            value = password,
-            onValueChange = { password = it},
-            label = { Text("Password")}
-        )
-
-        // Button to be able to create your account
-        ElevatedButton(
-            onClick = {
-                if (email.isBlank() || password.isBlank() || dob.isBlank() || firstName.isBlank() || lastName.isBlank()){
-                Toast.makeText(context, "Fill in all the fields", Toast.LENGTH_SHORT).show()
-            }
-                // Password must be greater than 6 and less than 30 characters
-                else if (password.length < 6 || password.length > 30){
-                    Toast.makeText(context, "Password must be greater than 6 and less than 30 characters.", Toast.LENGTH_SHORT).show()
-                }
-                // Email must be valid using regex.
-                else if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex())){
-                    Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
-                }
-
-                // First name must be greater than 6 and less than 30 characters
-                else if (firstName.length < 3 || firstName.length > 30){
-                Toast.makeText(context, "First name must be greater than 3 and less than 30 characters.", Toast.LENGTH_SHORT).show()
-            }
-                // Last name must be greater than 6 and less than 30 characters
-                else if (lastName.length < 3 || lastName.length > 30){
-                    Toast.makeText(context, "Last name must be greater than 3 and less than 30 characters.", Toast.LENGTH_SHORT).show()
-                }
-                // Date of birth must be valid using regex.
-                else if (!dob.matches("^(0[1-9]|1[0-2])/([0][1-9]|[12][0-9]|3[01])/\\d{4}$".toRegex())){
-                    Toast.makeText(context, "Please enter a valid date of birth MM/DD/YYYY", Toast.LENGTH_SHORT).show()
-                }
 
 
-                else {
-                    Toast.makeText(context, "Successful account creation, go back to log in!", Toast.LENGTH_SHORT).show()
-                } }
+        // column for login page
+        Column(
+            // Add scrolling state
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+
+            // pushes all the horizontal alignment of the textboxes into the center
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+            // Vertical padding between all the elements in the column
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text("Create account")
-        }
+            PlantPicture()
 
-        // Button to go back to the log in screen if you already have an account
-        ElevatedButton(
-            onClick = { nav.popBackStack() }
-        ) {
-            Text("Already have an account? Login")
-        }
+            Text(
+                "Sign up",
+                // Center the words on the splash screen
+                textAlign = TextAlign.Center,
+                // makes the font larger
+                fontSize = 30.sp,
 
+                // Make the font bold
+                fontWeight = FontWeight.Bold
+            )
+
+            TextField(
+                value = firstName,
+                shape = RoundedCornerShape(12.dp),
+                onValueChange = { firstName = it },
+                label = { Text("First Name") }
+            )
+
+            TextField(
+                value = lastName,
+                shape = RoundedCornerShape(12.dp),
+                onValueChange = { lastName = it },
+                label = { Text("Last Name") }
+            )
+
+            TextField(
+                value = dob,
+                shape = RoundedCornerShape(12.dp),
+                onValueChange = { dob = it },
+                label = { Text("Date of Birth") }
+            )
+
+            TextField(
+                value = email,
+                shape = RoundedCornerShape(12.dp),
+                onValueChange = { email = it },
+                label = { Text("Email") }
+            )
+            TextField(
+                value = password,
+                shape = RoundedCornerShape(12.dp),
+                onValueChange = { password = it },
+                label = { Text("Password") }
+            )
+
+            // Button to be able to create your account
+            ElevatedButton(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.DarkGray
+                ),
+                onClick = {
+                    if (email.isBlank() || password.isBlank() || dob.isBlank() || firstName.isBlank() || lastName.isBlank()) {
+                        Toast.makeText(context, "Fill in all the fields", Toast.LENGTH_SHORT).show()
+                    }
+                    // Password must be greater than 6 and less than 30 characters
+                    else if (password.length < 6 || password.length > 30) {
+                        Toast.makeText(
+                            context,
+                            "Password must be greater than 6 and less than 30 characters.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    // Email must be valid using regex.
+                    else if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex())) {
+                        Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    // First name must be greater than 3 and less than 30 characters
+                    else if (firstName.length < 3 || firstName.length > 30) {
+                        Toast.makeText(
+                            context,
+                            "First name must be greater than 3 and less than 30 characters.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    // Last name must be greater than 3 and less than 30 characters
+                    else if (lastName.length < 3 || lastName.length > 30) {
+                        Toast.makeText(
+                            context,
+                            "Last name must be greater than 3 and less than 30 characters.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    // Date of birth must be valid using regex.
+                    else if (!dob.matches("^(0[1-9]|1[0-2])/([0][1-9]|[12][0-9]|3[01])/\\d{4}$".toRegex())) {
+                        Toast.makeText(
+                            context,
+                            "Please enter a valid date of birth MM/DD/YYYY",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Successful account creation, go back to log in!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            ) {
+                Text("Create account")
+            }
+
+            // Button to go back to the log in screen if you already have an account
+            ElevatedButton(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.DarkGray
+                ),
+                onClick = { nav.popBackStack() }
+            ) {
+                Text("Already have an account? Login")
+            }
+
+        }
     }
 }
 
