@@ -7,6 +7,7 @@
 2. Users can either log in or register.
 3. Register page has fields for first name, family name, DOB, email and password.
 4. Validation for the inputted text.
+5. Uses Toast widget notifications for validation.
 5. Works on phones and tablets. 
 
 You should have for your app:

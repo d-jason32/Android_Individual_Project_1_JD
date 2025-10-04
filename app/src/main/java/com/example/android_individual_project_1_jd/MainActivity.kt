@@ -2,6 +2,7 @@ package com.example.android_individual_project_1_jd
 // All the imports required for the app.
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -111,9 +113,10 @@ fun OnboardingPreview() {
 // Function to display the login screen
 @Composable
 fun Login(nav: NavHostController, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     // needed for the text boxes
-    var text by remember { mutableStateOf("")}
-
+    var email by remember { mutableStateOf("")}
+    var password by remember { mutableStateOf("")}
 
     Surface(
         color = MaterialTheme.colorScheme.primary,
@@ -142,19 +145,35 @@ fun Login(nav: NavHostController, modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Bold)
 
             TextField(
-                value = text,
-                onValueChange = { text = it},
-                label = { Text("Username or Email")}
+                value = email,
+                onValueChange = { email = it},
+                label = { Text("Email")}
             )
 
             TextField(
-                value = text,
-                onValueChange = { text = it},
+                value = password,
+                onValueChange = { password = it},
                 label = { Text("Password")}
             )
             // Button for login
             ElevatedButton(
-                onClick = {  }
+                onClick = {
+                    // All fields must be filled in
+                    if (email.isBlank() || password.isBlank()){
+                        Toast.makeText(context, "Fill in all the fields", Toast.LENGTH_SHORT).show()
+                    }
+                    // Password must be greater than 6 and less than 30 characters
+                    else if (password.length < 6 || password.length > 30){
+                        Toast.makeText(context, "Password must be greater than 6 and less than 30 characters.", Toast.LENGTH_SHORT).show()
+                    }
+                    // Email must be valid using regex.
+                    else if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex())){
+                        Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(context, "Successful sign on", Toast.LENGTH_SHORT).show()
+                    }
+                }
             ) {
                 Text("Login")
             }
@@ -180,7 +199,15 @@ fun MyAppPreview() {
 
 @Composable
 fun RegisterScreen(nav: NavHostController){
-    var text by remember { mutableStateOf("")}
+    val context = LocalContext.current
+    // needed for the text boxes
+    var firstName by remember { mutableStateOf("")}
+    var lastName by remember { mutableStateOf("")}
+    var dob by remember { mutableStateOf("")}
+    var email by remember { mutableStateOf("")}
+    var password by remember { mutableStateOf("")}
+
+
 
     // column for login page
     Column(
@@ -203,37 +230,66 @@ fun RegisterScreen(nav: NavHostController){
             fontWeight = FontWeight.Bold)
 
         TextField(
-            value = text,
-            onValueChange = { text = it},
+            value = firstName,
+            onValueChange = { firstName = it},
             label = { Text("First Name")}
         )
 
         TextField(
-            value = text,
-            onValueChange = { text = it},
+            value = lastName,
+            onValueChange = { lastName = it},
             label = { Text("Last Name")}
         )
 
         TextField(
-            value = text,
-            onValueChange = { text = it},
+            value = dob,
+            onValueChange = { dob = it},
             label = { Text("Date of Birth")}
         )
 
         TextField(
-            value = text,
-            onValueChange = { text = it},
+            value = email,
+            onValueChange = { email = it},
             label = { Text("Email")}
         )
         TextField(
-            value = text,
-            onValueChange = { text = it},
+            value = password,
+            onValueChange = { password = it},
             label = { Text("Password")}
         )
 
         // Button to be able to create your account
         ElevatedButton(
-            onClick = { /* Implement this later */ }
+            onClick = {
+                if (email.isBlank() || password.isBlank() || dob.isBlank() || firstName.isBlank() || lastName.isBlank()){
+                Toast.makeText(context, "Fill in all the fields", Toast.LENGTH_SHORT).show()
+            }
+                // Password must be greater than 6 and less than 30 characters
+                else if (password.length < 6 || password.length > 30){
+                    Toast.makeText(context, "Password must be greater than 6 and less than 30 characters.", Toast.LENGTH_SHORT).show()
+                }
+                // Email must be valid using regex.
+                else if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex())){
+                    Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                }
+
+                // First name must be greater than 6 and less than 30 characters
+                else if (firstName.length < 3 || firstName.length > 30){
+                Toast.makeText(context, "First name must be greater than 3 and less than 30 characters.", Toast.LENGTH_SHORT).show()
+            }
+                // Last name must be greater than 6 and less than 30 characters
+                else if (lastName.length < 3 || lastName.length > 30){
+                    Toast.makeText(context, "Last name must be greater than 3 and less than 30 characters.", Toast.LENGTH_SHORT).show()
+                }
+                // Date of birth must be valid using regex.
+                else if (!dob.matches("^(0[1-9]|1[0-2])/([0][1-9]|[12][0-9]|3[01])/\\d{4}$".toRegex())){
+                    Toast.makeText(context, "Please enter a valid date of birth MM/DD/YYYY", Toast.LENGTH_SHORT).show()
+                }
+
+
+                else {
+                    Toast.makeText(context, "Successful account creation, go back to log in!", Toast.LENGTH_SHORT).show()
+                } }
         ) {
             Text("Create account")
         }
