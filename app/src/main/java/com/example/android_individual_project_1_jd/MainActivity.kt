@@ -1,16 +1,12 @@
 package com.example.android_individual_project_1_jd
+// All the imports required for the app.
 
-import android.R.attr.padding
-import android.R.attr.text
-import android.R.id.bold
-import android.graphics.Picture
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,8 +29,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.android_individual_project_1_jd.ui.theme.Android_Individual_Project_1_JDTheme
 
+// Main activity for the application
+// The main activity for the app will start off at the splash screen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,19 +49,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun MyApp(modifier: Modifier = Modifier) {
 
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
-
-    Surface(modifier) {
-        if (shouldShowOnboarding) {
-            OnboardingScreen(onContinueClicked = { shouldShowOnboarding = false })
-        } else {
-            Login()
-        }
-    }
-}
 
 // Composable function added to add a picture of the logo to the
 // splash screen
@@ -72,6 +62,7 @@ fun PlantPicture() {
 // Splash screen that shows up before the login and register page
 @Composable
 fun OnboardingScreen(
+    // After you click continue you will go to the login screen
     onContinueClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -108,7 +99,7 @@ fun OnboardingScreen(
     }
 }
 
-
+// Function to display the splash screen
 @Preview(showBackground = true, widthDp = 320, heightDp = 320)
 @Composable
 fun OnboardingPreview() {
@@ -117,9 +108,10 @@ fun OnboardingPreview() {
     }
 }
 
+// Function to display the login screen
 @Composable
-fun Login(modifier: Modifier = Modifier) {
-    // needed for the text
+fun Login(nav: NavHostController, modifier: Modifier = Modifier) {
+    // needed for the text boxes
     var text by remember { mutableStateOf("")}
 
 
@@ -152,7 +144,7 @@ fun Login(modifier: Modifier = Modifier) {
             TextField(
                 value = text,
                 onValueChange = { text = it},
-                label = { Text("Username")}
+                label = { Text("Username or Email")}
             )
 
             TextField(
@@ -160,29 +152,21 @@ fun Login(modifier: Modifier = Modifier) {
                 onValueChange = { text = it},
                 label = { Text("Password")}
             )
-
+            // Button for login
             ElevatedButton(
                 onClick = {  }
             ) {
                 Text("Login")
             }
-
+            // Button to go to the register account page
             ElevatedButton(
-                onClick = {  }
+                onClick = { nav.navigate("register") }
             ) {
                 Text("Don't have an account? Register")
             }
 
         }
 
-    }
-}
-
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun GreetingPreview() {
-    Android_Individual_Project_1_JDTheme {
-        Login()
     }
 }
 
@@ -195,7 +179,7 @@ fun MyAppPreview() {
 }
 
 @Composable
-fun RegisterScreen(){
+fun RegisterScreen(nav: NavHostController){
     var text by remember { mutableStateOf("")}
 
     // column for login page
@@ -247,14 +231,16 @@ fun RegisterScreen(){
             label = { Text("Password")}
         )
 
+        // Button to be able to create your account
         ElevatedButton(
-            onClick = {  }
+            onClick = { /* Implement this later */ }
         ) {
-            Text("Register")
+            Text("Create account")
         }
 
+        // Button to go back to the log in screen if you already have an account
         ElevatedButton(
-            onClick = {  }
+            onClick = { nav.popBackStack() }
         ) {
             Text("Already have an account? Login")
         }
@@ -262,3 +248,45 @@ fun RegisterScreen(){
     }
 }
 
+
+// Main app function to allow for navigation
+@Composable
+fun MyApp(modifier: Modifier = Modifier) {
+    // Needed to create a navigation controller
+    val nav = rememberNavController()
+
+    Surface(modifier) {
+        NavHost(
+            navController = nav,
+            // makes the app start at the login screen
+            startDestination = "onboarding"
+        ) {
+            composable("onboarding") {
+
+                /*
+                If the button on the splash screen is clicked,
+                it will go to the login screen.
+
+                If the button on the login screen is clicked, it will go
+                to the register screen.
+
+                If the button on the register screen is clicked, it will go onto the
+                login screen.
+                 */
+
+                OnboardingScreen(
+                    onContinueClicked = {
+                        nav.navigate("login") {
+                            popUpTo("onboarding") { inclusive = true }
+                        }
+                    }
+                )
+            }
+            // Route for the login screen
+            composable("login") { Login(nav) }
+
+            // route for the register screen
+            composable("register") { RegisterScreen(nav) }
+        }
+    }
+}

@@ -6,14 +6,12 @@
 1. Splash screen with the app name and logo.
 2. Users can either log in or register.
 3. Register page has fields for first name, family name, DOB, email and password.
-4. Validation for the inputted text. 
+4. Validation for the inputted text.
 5. Works on phones and tablets. 
 
 You should have for your app:
 
-    You should then move to a screen that asks the user for either to log in or to register.
 
-    If the user clicks the registration page, the registration page should have fields for at least first name, family name, date of birth, email, and password.
 
     Validate that the entered data is not empty.
 
