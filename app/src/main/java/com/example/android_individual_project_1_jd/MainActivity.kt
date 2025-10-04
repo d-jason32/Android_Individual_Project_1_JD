@@ -1,5 +1,7 @@
 package com.example.android_individual_project_1_jd
 
+import android.R.attr.padding
+import android.R.attr.text
 import android.R.id.bold
 import android.graphics.Picture
 import android.os.Bundle
@@ -17,6 +19,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +41,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Android_Individual_Project_1_JDTheme {
                 MyApp(modifier = Modifier.fillMaxSize())
+                
             }
         }
     }
@@ -52,7 +56,7 @@ fun MyApp(modifier: Modifier = Modifier) {
         if (shouldShowOnboarding) {
             OnboardingScreen(onContinueClicked = { shouldShowOnboarding = false })
         } else {
-            Greetings()
+            Login()
         }
     }
 }
@@ -65,6 +69,7 @@ fun PlantPicture() {
           contentDescription = null  )
 }
 
+// Splash screen that shows up before the login and register page
 @Composable
 fun OnboardingScreen(
     onContinueClicked: () -> Unit,
@@ -92,7 +97,9 @@ fun OnboardingScreen(
 
         // Adds a button
         Button(
-            modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+                .fillMaxWidth(),
             onClick = onContinueClicked,
 
         ) {
@@ -101,17 +108,6 @@ fun OnboardingScreen(
     }
 }
 
-@Composable
-private fun Greetings(
-    modifier: Modifier = Modifier,
-    names: List<String> = listOf("World", "Compose")
-) {
-    Column(modifier = modifier.padding(vertical = 4.dp)) {
-        for (name in names) {
-            Greeting(name = name)
-        }
-    }
-}
 
 @Preview(showBackground = true, widthDp = 320, heightDp = 320)
 @Composable
@@ -122,31 +118,63 @@ fun OnboardingPreview() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Login(modifier: Modifier = Modifier) {
+    // needed for the text
+    var text by remember { mutableStateOf("")}
 
-    var expanded by remember { mutableStateOf(false) }
-
-    val extraPadding = if (expanded) 48.dp else 0.dp
 
     Surface(
         color = MaterialTheme.colorScheme.primary,
         modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
-        Row(modifier = Modifier.padding(24.dp)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(bottom = extraPadding)
-            ) {
-                Text(text = "Hello, ")
-                Text(text = name)
-            }
+        // Column for the login page
+        Column(
+            modifier = Modifier.fillMaxSize(),
+
+            // pushes all the horizontal alignment of the textboxes into the center
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+            // Vertical padding between all the elements in the column
+            verticalArrangement = Arrangement.spacedBy(40.dp)
+        ) {
+            PlantPicture()
+
+            Text("Sign in",
+                // Center the words on the splash screen
+                textAlign = TextAlign.Center,
+
+                // makes the font larger
+                fontSize = 30.sp,
+
+                // Make the font bold
+                fontWeight = FontWeight.Bold)
+
+            TextField(
+                value = text,
+                onValueChange = { text = it},
+                label = { Text("Username")}
+            )
+
+            TextField(
+                value = text,
+                onValueChange = { text = it},
+                label = { Text("Password")}
+            )
+
             ElevatedButton(
-                onClick = { expanded = !expanded }
+                onClick = {  }
             ) {
-                Text(if (expanded) "Show less" else "Show more")
+                Text("Login")
             }
+
+            ElevatedButton(
+                onClick = {  }
+            ) {
+                Text("Don't have an account? Register")
+            }
+
         }
+
     }
 }
 
@@ -154,7 +182,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     Android_Individual_Project_1_JDTheme {
-        Greetings()
+        Login()
     }
 }
 
@@ -163,6 +191,74 @@ fun GreetingPreview() {
 fun MyAppPreview() {
     Android_Individual_Project_1_JDTheme {
         MyApp(Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+fun RegisterScreen(){
+    var text by remember { mutableStateOf("")}
+
+    // column for login page
+    Column(
+        modifier = Modifier.fillMaxSize(),
+
+        // pushes all the horizontal alignment of the textboxes into the center
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        // Vertical padding between all the elements in the column
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        PlantPicture()
+
+        Text("Sign up",
+            // Center the words on the splash screen
+            textAlign = TextAlign.Center,
+            // makes the font larger
+            fontSize = 30.sp,
+            // Make the font bold
+            fontWeight = FontWeight.Bold)
+
+        TextField(
+            value = text,
+            onValueChange = { text = it},
+            label = { Text("First Name")}
+        )
+
+        TextField(
+            value = text,
+            onValueChange = { text = it},
+            label = { Text("Last Name")}
+        )
+
+        TextField(
+            value = text,
+            onValueChange = { text = it},
+            label = { Text("Date of Birth")}
+        )
+
+        TextField(
+            value = text,
+            onValueChange = { text = it},
+            label = { Text("Email")}
+        )
+        TextField(
+            value = text,
+            onValueChange = { text = it},
+            label = { Text("Password")}
+        )
+
+        ElevatedButton(
+            onClick = {  }
+        ) {
+            Text("Register")
+        }
+
+        ElevatedButton(
+            onClick = {  }
+        ) {
+            Text("Already have an account? Login")
+        }
+
     }
 }
 
